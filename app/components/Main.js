@@ -20,15 +20,30 @@ class Main extends Component {
         },{
           id: 3,
           category: '韓文歌曲'
-        }
-      ],
+        }],
+      addedVideos: [{
+        listId: 1,
+        videoId: '0YHx01yH-t4',
+        title: '[甜約翰] Angelina',
+        description: '好歌！'
+      },{
+        listId: 1,
+        videoId: '5VfMdqkQwDo',
+        title: '[甜約翰] 走',
+        description: '為宅男發聲的最新力作'
+      },{
+        listId: 3,
+        videoId: '6pA_Tou-DPI',
+        title: '[少女時代] The Boys',
+        description: '少女時代的最新力作'
+      }],
       isLoading: false
     }
   }
 
 
   render() {
-    let {playlist, videos, isLoading} = this.state
+    const {playlist, videos, isLoading, addedVideos} = this.state
     const renderDisplayWall = () => {
       if (isLoading){
         return (
@@ -37,7 +52,11 @@ class Main extends Component {
       } else if (videos){
         return (
           <div>
-            <DisplayList videos={videos}/>
+            <DisplayList
+              videos={videos}
+              addedVideos={addedVideos}
+              playlist={playlist}
+            />
           </div>
         )
       } else {
@@ -54,6 +73,7 @@ class Main extends Component {
           <div className="small-4 columns">
             <PlayList
               playlist={playlist}
+              addedVideos={addedVideos}
               onAddPlayList={(text) => this.handleAddPlayList(text)}
             />
           </div>
@@ -65,9 +85,10 @@ class Main extends Component {
     )
   }
 
-  //hepler functions
+  //-----hepler functions------
+  // PlayList > AddPlayList
   handleAddPlayList(text) {
-    let {playlist} = this.state
+    const {playlist} = this.state
     const playlistQt = playlist.length
     const playlistNew = playlist.concat({
       id: playlistQt + 1,
@@ -75,7 +96,7 @@ class Main extends Component {
     })
     this.setState({playlist: playlistNew})
   }
-
+  // Nav > SearchBar
   handleSearchTerm(term){
     this.setState({isLoading: true})
     YTSearch(term)
@@ -86,6 +107,17 @@ class Main extends Component {
         })
     }).catch( (err) =>{
       console.log(`YTSearch Error: ${err}`)
+    })
+  }
+
+
+  // Display > DisplayList > DisplayListDetail
+  handleAddVideoToList(addedVideo){
+    // addedVideo = {listId, videoId, title, description}
+    const addedVideosNew = addedVideos.concat(addedVideo)
+    //先寫死加入第一個播放清單
+    this.setState({
+      addedVideos: addedVideosNew
     })
   }
 }

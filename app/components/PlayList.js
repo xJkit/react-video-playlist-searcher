@@ -6,11 +6,24 @@ class PlayList extends Component{
   }
 
   render(){
-    const {playlist} = this.props
+    const {playlist, addedVideos} = this.props
+    // const countAddedVideos = (playlistItem, theAddedVideos) => {
+    //
+    //
+    // }
     const renderList = (items) => (
       items.map( item => (
           <li key={item.id}>
-            <a href="#">{item.category}</a>
+            <ul className="menu">
+              <li>
+                <a href="#">{item.category}</a>
+              </li>
+              <li>
+                <span className="badge">
+                  {addedVideos.filter((addedVideo) => (addedVideo.listId == item.id)).length}
+                </span>
+              </li>
+            </ul>
           </li>
         )
       )
