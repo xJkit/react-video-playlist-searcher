@@ -6,6 +6,7 @@ import Nav from 'Nav'
 import PlayList from 'PlayList'
 import Display from 'Display'
 import DisplayList from 'DisplayList'
+import ListModal from 'ListModal'
 
 class Main extends Component {
   constructor(props){
@@ -37,13 +38,19 @@ class Main extends Component {
         title: '[少女時代] The Boys',
         description: '少女時代的最新力作'
       }],
-      isLoading: false
+      isLoading: false,
+      isLoadingList: false,
+      clickedVideo:{
+        videoId: undefined,
+        title: undefined,
+        description: undefined
+      }
     }
   }
 
 
   render() {
-    const {playlist, videos, isLoading, addedVideos} = this.state
+    const {playlist, videos, isLoading, addedVideos, isLoadingList, clickedVideo} = this.state
     const renderDisplayWall = () => {
       if (isLoading){
         return (
@@ -56,11 +63,27 @@ class Main extends Component {
               videos={videos}
               addedVideos={addedVideos}
               playlist={playlist}
+              isLoadingList={isLoadingList}
+              onIsLoadingList={(Bool) => this.handleIsLoadingList(Bool)}
+              onClickedVideo={(video) => this.handleClickedVideo(video)}
             />
           </div>
         )
       } else {
         return (<div>首頁！！！</div>)
+      }
+    }
+
+    const renderListModal= () => {
+      if (isLoadingList){
+        return (
+          <ListModal
+            onIsLoadingList={(Bool) => this.handleIsLoadingList(Bool)}
+            playlist={playlist}
+            clickedVideo={clickedVideo}
+            onAddVideoToList={(addedVideo) => this.handleAddVideoToList(addedVideo)}
+          />
+        )
       }
     }
 
@@ -70,6 +93,7 @@ class Main extends Component {
           <Nav onSearchTerm={(term) => this.handleSearchTerm(term)}/>
         </div>
         <div className="row">
+          {renderListModal()}
           <div className="small-4 columns">
             <PlayList
               playlist={playlist}
@@ -114,10 +138,18 @@ class Main extends Component {
   // Display > DisplayList > DisplayListDetail
   handleAddVideoToList(addedVideo){
     // addedVideo = {listId, videoId, title, description}
+    const {addedVideos} = this.state
     const addedVideosNew = addedVideos.concat(addedVideo)
-    //先寫死加入第一個播放清單
     this.setState({
       addedVideos: addedVideosNew
+    })
+  }
+  handleIsLoadingList(Bool){
+    this.setState({isLoadingList: Bool})
+  }
+  handleClickedVideo(clickedVideo){
+    this.setState({
+      clickedVideo: clickedVideo
     })
   }
 }
