@@ -6,56 +6,79 @@ import Nav from 'Nav'
 import PlayList from 'PlayList'
 import Display from 'Display'
 import DisplayList from 'DisplayList'
+import DisplayListSimple from 'DisplayListSimple'
 import ListModal from 'ListModal'
 
 class Main extends Component {
   constructor(props){
     super(props)
+    /*
+    playlist: [{
+        id: 1,
+        category: '中文歌曲'
+      },{
+        id: 2,
+        category: '英文歌曲'
+      },{
+        id: 3,
+        category: '韓文歌曲'
+      }],
+    addedVideos: [{
+      listId: 1,
+      videoId: '0YHx01yH-t4',
+      title: '[甜約翰] Angelina',
+      description: '好歌！'
+    },{
+      listId: 1,
+      videoId: '5VfMdqkQwDo',
+      title: '[甜約翰] 走',
+      description: '為宅男發聲的最新力作'
+    },{
+      listId: 3,
+      videoId: '6pA_Tou-DPI',
+      title: '[少女時代] The Boys',
+      description: '少女時代的最新力作'
+    }],
+    */
     this.state = {
       playlist: [{
           id: 1,
           category: '中文歌曲'
         },{
           id: 2,
-          category: '英文歌曲'
+          category: '西洋歌曲'
         },{
           id: 3,
           category: '韓文歌曲'
         }],
-      addedVideos: [{
-        listId: 1,
-        videoId: '0YHx01yH-t4',
-        title: '[甜約翰] Angelina',
-        description: '好歌！'
-      },{
-        listId: 1,
-        videoId: '5VfMdqkQwDo',
-        title: '[甜約翰] 走',
-        description: '為宅男發聲的最新力作'
-      },{
-        listId: 3,
-        videoId: '6pA_Tou-DPI',
-        title: '[少女時代] The Boys',
-        description: '少女時代的最新力作'
-      }],
+        addedVideos: [{
+          listId: null,
+          videoId: null,
+          title: null,
+          description: null
+        }],
       isLoading: false,
       isLoadingList: false,
       clickedVideo:{
         videoId: undefined,
         title: undefined,
         description: undefined
-      }
+      },
+      listMode: false,
+      selectedListId: undefined
     }
   }
 
 
   render() {
-    const {playlist, videos, isLoading, addedVideos, isLoadingList, clickedVideo} = this.state
+    const {playlist, videos, isLoading, addedVideos, isLoadingList, clickedVideo, listMode, selectedListId} = this.state
     const renderDisplayWall = () => {
       if (isLoading){
         return (
           <div>讀取中.....</div>
         )
+      } else if (listMode) {
+        return <DisplayListSimple listId={selectedListId} addedVideos={addedVideos}/>
       } else if (videos){
         return (
           <div>
@@ -99,6 +122,8 @@ class Main extends Component {
               playlist={playlist}
               addedVideos={addedVideos}
               onAddPlayList={(text) => this.handleAddPlayList(text)}
+              onListMode={(Bool) => this.handleListMode(Bool)}
+              onSelectedListId={(id) => this.handleSelectedListId(id)}
             />
           </div>
           <div className="small-8 columns">
@@ -120,9 +145,17 @@ class Main extends Component {
     })
     this.setState({playlist: playlistNew})
   }
+  handleSelectedListId(id){
+    const {selectedListId} = this.state
+    this.setState({selectedListId: id})
+  }
+  handleListMode(Bool){
+    this.setState({listMode: Bool})
+  }
+
   // Nav > SearchBar
   handleSearchTerm(term){
-    this.setState({isLoading: true})
+    this.setState({isLoading: true, listMode: false})
     YTSearch(term)
       .then( (videos) => {
         this.setState({

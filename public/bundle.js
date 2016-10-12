@@ -127,7 +127,7 @@
 	
 	var _router2 = _interopRequireDefault(_router);
 	
-	__webpack_require__(/*! style!css!sass!applicationStyles */ 257);
+	__webpack_require__(/*! style!css!sass!applicationStyles */ 259);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -20340,7 +20340,7 @@
 	
 	var _Main2 = _interopRequireDefault(_Main);
 	
-	var _DisplayIndex = __webpack_require__(/*! DisplayIndex */ 256);
+	var _DisplayIndex = __webpack_require__(/*! DisplayIndex */ 258);
 	
 	var _DisplayIndex2 = _interopRequireDefault(_DisplayIndex);
 	
@@ -26231,7 +26231,11 @@
 	
 	var _DisplayList2 = _interopRequireDefault(_DisplayList);
 	
-	var _ListModal = __webpack_require__(/*! ListModal */ 261);
+	var _DisplayListSimple = __webpack_require__(/*! DisplayListSimple */ 256);
+	
+	var _DisplayListSimple2 = _interopRequireDefault(_DisplayListSimple);
+	
+	var _ListModal = __webpack_require__(/*! ListModal */ 257);
 	
 	var _ListModal2 = _interopRequireDefault(_ListModal);
 	
@@ -26252,6 +26256,34 @@
 	  function Main(props) {
 	    _classCallCheck(this, Main);
 	
+	    /*
+	    playlist: [{
+	        id: 1,
+	        category: '中文歌曲'
+	      },{
+	        id: 2,
+	        category: '英文歌曲'
+	      },{
+	        id: 3,
+	        category: '韓文歌曲'
+	      }],
+	    addedVideos: [{
+	      listId: 1,
+	      videoId: '0YHx01yH-t4',
+	      title: '[甜約翰] Angelina',
+	      description: '好歌！'
+	    },{
+	      listId: 1,
+	      videoId: '5VfMdqkQwDo',
+	      title: '[甜約翰] 走',
+	      description: '為宅男發聲的最新力作'
+	    },{
+	      listId: 3,
+	      videoId: '6pA_Tou-DPI',
+	      title: '[少女時代] The Boys',
+	      description: '少女時代的最新力作'
+	    }],
+	    */
 	    var _this = _possibleConstructorReturn(this, (Main.__proto__ || Object.getPrototypeOf(Main)).call(this, props));
 	
 	    _this.state = {
@@ -26260,26 +26292,16 @@
 	        category: '中文歌曲'
 	      }, {
 	        id: 2,
-	        category: '英文歌曲'
+	        category: '西洋歌曲'
 	      }, {
 	        id: 3,
 	        category: '韓文歌曲'
 	      }],
 	      addedVideos: [{
-	        listId: 1,
-	        videoId: '0YHx01yH-t4',
-	        title: '[甜約翰] Angelina',
-	        description: '好歌！'
-	      }, {
-	        listId: 1,
-	        videoId: '5VfMdqkQwDo',
-	        title: '[甜約翰] 走',
-	        description: '為宅男發聲的最新力作'
-	      }, {
-	        listId: 3,
-	        videoId: '6pA_Tou-DPI',
-	        title: '[少女時代] The Boys',
-	        description: '少女時代的最新力作'
+	        listId: null,
+	        videoId: null,
+	        title: null,
+	        description: null
 	      }],
 	      isLoading: false,
 	      isLoadingList: false,
@@ -26287,7 +26309,9 @@
 	        videoId: undefined,
 	        title: undefined,
 	        description: undefined
-	      }
+	      },
+	      listMode: false,
+	      selectedListId: undefined
 	    };
 	    return _this;
 	  }
@@ -26304,6 +26328,8 @@
 	      var addedVideos = _state.addedVideos;
 	      var isLoadingList = _state.isLoadingList;
 	      var clickedVideo = _state.clickedVideo;
+	      var listMode = _state.listMode;
+	      var selectedListId = _state.selectedListId;
 	
 	      var renderDisplayWall = function renderDisplayWall() {
 	        if (isLoading) {
@@ -26312,6 +26338,8 @@
 	            null,
 	            '\u8B80\u53D6\u4E2D.....'
 	          );
+	        } else if (listMode) {
+	          return _react2.default.createElement(_DisplayListSimple2.default, { listId: selectedListId, addedVideos: addedVideos });
 	        } else if (videos) {
 	          return _react2.default.createElement(
 	            'div',
@@ -26375,6 +26403,12 @@
 	              addedVideos: addedVideos,
 	              onAddPlayList: function onAddPlayList(text) {
 	                return _this2.handleAddPlayList(text);
+	              },
+	              onListMode: function onListMode(Bool) {
+	                return _this2.handleListMode(Bool);
+	              },
+	              onSelectedListId: function onSelectedListId(id) {
+	                return _this2.handleSelectedListId(id);
 	              }
 	            })
 	          ),
@@ -26402,6 +26436,19 @@
 	      });
 	      this.setState({ playlist: playlistNew });
 	    }
+	  }, {
+	    key: 'handleSelectedListId',
+	    value: function handleSelectedListId(id) {
+	      var selectedListId = this.state.selectedListId;
+	
+	      this.setState({ selectedListId: id });
+	    }
+	  }, {
+	    key: 'handleListMode',
+	    value: function handleListMode(Bool) {
+	      this.setState({ listMode: Bool });
+	    }
+	
 	    // Nav > SearchBar
 	
 	  }, {
@@ -26409,7 +26456,7 @@
 	    value: function handleSearchTerm(term) {
 	      var _this3 = this;
 	
-	      this.setState({ isLoading: true });
+	      this.setState({ isLoading: true, listMode: false });
 	      (0, _YTSearchApi2.default)(term).then(function (videos) {
 	        _this3.setState({
 	          videos: videos,
@@ -27870,11 +27917,13 @@
 	      var _props = this.props;
 	      var playlist = _props.playlist;
 	      var addedVideos = _props.addedVideos;
-	      // const countAddedVideos = (playlistItem, theAddedVideos) => {
-	      //
-	      //
-	      // }
+	      var onListMode = _props.onListMode;
+	      var onSelectedListId = _props.onSelectedListId;
 	
+	      var getReadyToSimpleList = function getReadyToSimpleList(_id) {
+	        onListMode(true);
+	        onSelectedListId(_id);
+	      };
 	      var renderList = function renderList(items) {
 	        return items.map(function (item) {
 	          return _react2.default.createElement(
@@ -27885,7 +27934,9 @@
 	              { className: "menu" },
 	              _react2.default.createElement(
 	                "li",
-	                null,
+	                { onClick: function onClick() {
+	                    return getReadyToSimpleList(item.id);
+	                  } },
 	                _react2.default.createElement(
 	                  "a",
 	                  { href: "#" },
@@ -28200,6 +28251,119 @@
 
 /***/ },
 /* 256 */
+/*!*********************************************!*\
+  !*** ./app/components/DisplayListSimple.js ***!
+  \*********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 8);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var DisplayListSimple = function DisplayListSimple(props) {
+	  var listId = props.listId;
+	  var addedVideos = props.addedVideos;
+	
+	  var listVideos = addedVideos.filter(function (addedVideo) {
+	    return listId == addedVideo.listId;
+	  });
+	
+	  var renderListVideos = function renderListVideos() {
+	    return listVideos.map(function (listVideo, index) {
+	      var EMBED_URL = 'https://youtube.com/embed/${listVideo.videoId}';
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'row', key: index },
+	        _react2.default.createElement(
+	          'h3',
+	          null,
+	          listVideo.title
+	        ),
+	        _react2.default.createElement(
+	          'p',
+	          null,
+	          listVideo.description
+	        ),
+	        _react2.default.createElement('hr', null)
+	      );
+	    });
+	  };
+	
+	  return _react2.default.createElement(
+	    'div',
+	    null,
+	    renderListVideos()
+	  );
+	};
+	
+	exports.default = DisplayListSimple;
+
+/***/ },
+/* 257 */
+/*!*************************************!*\
+  !*** ./app/components/ListModal.js ***!
+  \*************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 8);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var ListModal = function ListModal(props) {
+	  var onIsLoadingList = props.onIsLoadingList;
+	  var playlist = props.playlist;
+	  var clickedVideo = props.clickedVideo;
+	  var onAddVideoToList = props.onAddVideoToList;
+	
+	  var setVideo = function setVideo(listId, clickedVideo) {
+	    var addedVideo = clickedVideo;
+	    addedVideo.listId = listId;
+	    onAddVideoToList(addedVideo);
+	    onIsLoadingList(false);
+	  };
+	  return _react2.default.createElement(
+	    "div",
+	    { className: "callout warning modal" },
+	    _react2.default.createElement(
+	      "ul",
+	      { className: "menu vertical" },
+	      playlist.map(function (list) {
+	        return _react2.default.createElement(
+	          "li",
+	          null,
+	          _react2.default.createElement(
+	            "button",
+	            { onClick: function onClick() {
+	                return setVideo(list.id, clickedVideo);
+	              } },
+	            list.category
+	          )
+	        );
+	      })
+	    )
+	  );
+	};
+	
+	exports.default = ListModal;
+
+/***/ },
+/* 258 */
 /*!****************************************!*\
   !*** ./app/components/DisplayIndex.js ***!
   \****************************************/
@@ -28228,7 +28392,7 @@
 	exports.default = DisplayIndex;
 
 /***/ },
-/* 257 */
+/* 259 */
 /*!*****************************************************************************!*\
   !*** ./~/style-loader!./~/css-loader!./~/sass-loader!./app/styles/app.scss ***!
   \*****************************************************************************/
@@ -28237,10 +28401,10 @@
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(/*! !./../../~/css-loader!./../../~/sass-loader!./app.scss */ 258);
+	var content = __webpack_require__(/*! !./../../~/css-loader!./../../~/sass-loader!./app.scss */ 260);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(/*! ./../../~/style-loader/addStyles.js */ 260)(content, {});
+	var update = __webpack_require__(/*! ./../../~/style-loader/addStyles.js */ 262)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -28257,13 +28421,13 @@
 	}
 
 /***/ },
-/* 258 */
+/* 260 */
 /*!************************************************************!*\
   !*** ./~/css-loader!./~/sass-loader!./app/styles/app.scss ***!
   \************************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(/*! ./../../~/css-loader/lib/css-base.js */ 259)();
+	exports = module.exports = __webpack_require__(/*! ./../../~/css-loader/lib/css-base.js */ 261)();
 	// imports
 	
 	
@@ -28274,7 +28438,7 @@
 
 
 /***/ },
-/* 259 */
+/* 261 */
 /*!**************************************!*\
   !*** ./~/css-loader/lib/css-base.js ***!
   \**************************************/
@@ -28333,7 +28497,7 @@
 
 
 /***/ },
-/* 260 */
+/* 262 */
 /*!*************************************!*\
   !*** ./~/style-loader/addStyles.js ***!
   \*************************************/
@@ -28586,62 +28750,6 @@
 			URL.revokeObjectURL(oldSrc);
 	}
 
-
-/***/ },
-/* 261 */
-/*!*************************************!*\
-  !*** ./app/components/ListModal.js ***!
-  \*************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _react = __webpack_require__(/*! react */ 8);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var ListModal = function ListModal(props) {
-	  var onIsLoadingList = props.onIsLoadingList;
-	  var playlist = props.playlist;
-	  var clickedVideo = props.clickedVideo;
-	  var onAddVideoToList = props.onAddVideoToList;
-	
-	  var setVideo = function setVideo(listId, clickedVideo) {
-	    var addedVideo = clickedVideo;
-	    addedVideo.listId = listId;
-	    onAddVideoToList(addedVideo);
-	    onIsLoadingList(false);
-	  };
-	  return _react2.default.createElement(
-	    "div",
-	    { className: "callout warning modal" },
-	    _react2.default.createElement(
-	      "ul",
-	      { className: "menu vertical" },
-	      playlist.map(function (list) {
-	        return _react2.default.createElement(
-	          "li",
-	          null,
-	          _react2.default.createElement(
-	            "button",
-	            { onClick: function onClick() {
-	                return setVideo(list.id, clickedVideo);
-	              } },
-	            list.category
-	          )
-	        );
-	      })
-	    )
-	  );
-	};
-	
-	exports.default = ListModal;
 
 /***/ }
 /******/ ]);

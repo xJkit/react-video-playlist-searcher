@@ -6,17 +6,17 @@ class PlayList extends Component{
   }
 
   render(){
-    const {playlist, addedVideos} = this.props
-    // const countAddedVideos = (playlistItem, theAddedVideos) => {
-    //
-    //
-    // }
+    const {playlist, addedVideos, onListMode, onSelectedListId} = this.props
+    const getReadyToSimpleList = (_id) => {
+      onListMode(true)
+      onSelectedListId(_id)
+    }
     const renderList = (items) => (
       items.map( item => (
           <li key={item.id}>
             <ul className="menu">
-              <li>
-                <a href="#">{item.category}</a>
+              <li onClick={() => getReadyToSimpleList(item.id)}>
+                <a href="#" >{item.category}</a>
               </li>
               <li>
                 <span className="badge">
