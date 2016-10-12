@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
+import YTSearch from 'YTSearchApi'
 
 // Components
 import Nav from 'Nav'
 import PlayList from 'PlayList'
 import Display from 'Display'
+import DisplayList from 'DisplayList'
 
 class Main extends Component {
   constructor(props){
@@ -20,41 +22,47 @@ class Main extends Component {
           category: '韓文歌曲'
         }
       ],
-      searchDataMock: [
-        {
-          id: 1,
-          title: '周杰倫 [不該] Official MV',
-          description: '今年華語樂壇最震撼的深情對唱歌曲'
-        }, {
-          id: 2,
-          title: '周杰倫 [陽光宅男]',
-          description: '最新單曲 "陽光宅男" 對整天窩在家裡的男人發聲! '
-        }
-      ]
+      isLoading: false
     }
   }
 
+
   render() {
-    let {playlist} = this.state
+    let {playlist, videos, isLoading} = this.state
+    const renderDisplayWall = () => {
+      if (isLoading){
+        return (
+          <div>讀取中.....</div>
+        )
+      } else if (videos){
+        return (
+          <div>
+            <DisplayList videos={videos}/>
+          </div>
+        )
+      } else {
+        return (<div>首頁！！！</div>)
+      }
+    }
 
     return(
       <div className="container">
         <div className="row">
-          <Nav />
+          <Nav onSearchTerm={(term) => this.handleSearchTerm(term)}/>
         </div>
         <div className="row">
           <div className="small-4 columns">
             <PlayList playlist={playlist}/>
           </div>
           <div className="small-8 columns">
-            <Display children={this.props.children}/>
+            {renderDisplayWall()}
           </div>
         </div>
       </div>
     )
   }
 
-
+  //hepler functions
   handleAddPlayList(text) {
     let {playlist} = this.state
     const playlistQt = playlist.length
@@ -63,6 +71,19 @@ class Main extends Component {
       category: text
     })
     this.setState({playlist: playlistNew})
+  }
+
+  handleSearchTerm(term){
+    this.setState({isLoading: true})
+    YTSearch(term)
+      .then( (videos) => {
+        this.setState({
+          videos: videos,
+          isLoading: false
+        })
+    }).catch( (err) =>{
+      console.log(`YTSearch Error: ${err}`)
+    })
   }
 }
 

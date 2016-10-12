@@ -27,7 +27,8 @@ module.exports = {
       './app/components'
     ],
     alias: {
-      applicationStyles: 'app/styles/app.scss'
+      applicationStyles: 'app/styles/app.scss',
+      YTSearchApi: 'app/api/YTSearchApi.js'
     },
     extensions: ['', '.js', '.jsx']
   },
@@ -43,14 +44,15 @@ module.exports = {
       }
     ]
   },
+  devtool: 'cheap-module-eval-source-map',
   sassLoader: {
     includePaths: [
       path.resolve(__dirname, './node_modules/foundation-sites/scss')
     ]
   },
-  devtool: 'cheap-module-eval-source-map',
   devServer: {
     contentBase: "./public",
-    hot: true
+    historyApiFallback: true,
+    port: process.env.PORT
   }
 };

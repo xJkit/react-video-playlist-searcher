@@ -7,11 +7,7 @@ import DisplayIndex from 'DisplayIndex'
 
 
 const router = (
-  <Router history={hashHistory}>
-    <Route component={Main}>
-      <Route path="/" component={DisplayIndex}/>
-    </Route>
-  </Router>
+  <Main />
 )
 
 export default router

@@ -10,13 +10,15 @@ class Nav extends Component{
   }
 
   render(){
+    const {onSearchTerm} = this.props
+
     return (
       <div className="top-bar">
         <div className="top-bar-left">
           <Logo />
         </div>
         <div className="top-bar-right">
-          <SearchBar />
+          <SearchBar onSearchTerm={(term) => onSearchTerm(term)}/>
         </div>
       </div>
     )

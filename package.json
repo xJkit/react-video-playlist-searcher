@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "karma start",
-    "dev": "webpack-dev-server --progress --devTool eval --progress --colors",
+    "dev": "webpack-dev-server --progress --colors",
     "start": "node server.js"
   },
   "author": "Jay Chung",
