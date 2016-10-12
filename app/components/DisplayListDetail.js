@@ -3,7 +3,10 @@ import React from 'react'
 const DisplayListDetail = (props) => {
   const { id:{videoId}, snippet:{title, description}, snippet, addedVideos, playlist, isLoadingList, onIsLoadingList, onClickedVideo} = props
   const imgUrl = snippet.thumbnails.high.url
+  const EMBED_URL = `https://youtube.com/embed/${videoId}`
   //如同 https://i.ytimg.com/vi/z_jdiU47bFA/hqdefault.jpg
+  //使用 iframe: <iframe src={EMBED_URL} frameBorder="0" className="detail"></iframe>
+  // EMBED_URL = https://youtube.com/embed/${videoId}
   const setVideo = (title, description, videoId) => {
     const clickedVideo = {
       title: title,
@@ -25,17 +28,11 @@ const DisplayListDetail = (props) => {
     }
   }
 
-  // const renderPlaylist = (_playlist) => {
-  //   if (isLoadingList){
-  //     return _playlist.map( (theList) => <button className="add-list-btn">{theList.category}</button>)
-  //   }
-  // }
-
   return (
     <div>
       <div className="row">
-        <div className="columns small-4">
-          <img src={imgUrl} alt=""/>
+        <div className="columns small-4 ">
+          <iframe src={EMBED_URL} frameBorder="0" ></iframe>
         </div>
         <div className="columns small-8">
           <h3>{title}</h3>
