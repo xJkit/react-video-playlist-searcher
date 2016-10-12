@@ -26314,7 +26314,12 @@
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'small-4 columns' },
-	            _react2.default.createElement(_PlayList2.default, { playlist: playlist })
+	            _react2.default.createElement(_PlayList2.default, {
+	              playlist: playlist,
+	              onAddPlayList: function onAddPlayList(text) {
+	                return _this2.handleAddPlayList(text);
+	              }
+	            })
 	          ),
 	          _react2.default.createElement(
 	            'div',
@@ -27688,7 +27693,6 @@
 	    key: "onSearchBegins",
 	    value: function onSearchBegins() {
 	      var searchText = this.refs.searchText.value;
-	      console.log("You search " + searchText);
 	      if (searchText.length > 0) {
 	        this.refs.searchText.value = '';
 	        this.props.onSearchTerm(searchText);
@@ -27775,6 +27779,8 @@
 	  _createClass(PlayList, [{
 	    key: "render",
 	    value: function render() {
+	      var _this2 = this;
+	
 	      var playlist = this.props.playlist;
 	
 	      var renderList = function renderList(items) {
@@ -27819,7 +27825,9 @@
 	                null,
 	                _react2.default.createElement(
 	                  "button",
-	                  { className: "button hollow" },
+	                  { className: "button hollow", onClick: function onClick(evt) {
+	                      return _this2.onAddPlayListbBegins(evt);
+	                    } },
 	                  "\u65B0\u589E"
 	                )
 	              )
@@ -27827,6 +27835,20 @@
 	          )
 	        )
 	      );
+	    }
+	
+	    //helper functions
+	
+	  }, {
+	    key: "onAddPlayListbBegins",
+	    value: function onAddPlayListbBegins(evt) {
+	      var tempName = this.refs.playlistName.value;
+	      if (tempName.length > 0) {
+	        this.refs.playlistName.value = '';
+	        this.props.onAddPlayList(tempName);
+	      } else {
+	        this.refs.playlistName.focus();
+	      }
 	    }
 	  }]);
 	

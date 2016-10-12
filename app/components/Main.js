@@ -52,7 +52,10 @@ class Main extends Component {
         </div>
         <div className="row">
           <div className="small-4 columns">
-            <PlayList playlist={playlist}/>
+            <PlayList
+              playlist={playlist}
+              onAddPlayList={(text) => this.handleAddPlayList(text)}
+            />
           </div>
           <div className="small-8 columns">
             {renderDisplayWall()}

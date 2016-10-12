@@ -16,7 +16,6 @@ class PlayList extends Component{
       )
     )
 
-
     return(
       <div>
         <h3>播放清單</h3>
@@ -28,7 +27,7 @@ class PlayList extends Component{
                 <input type="text" placeholder='新增播放清單' ref="playlistName" />
               </li>
               <li>
-                <button className="button hollow" >新增</button>
+                <button className="button hollow" onClick={(evt) => this.onAddPlayListbBegins(evt)}>新增</button>
               </li>
             </ul>
           </li>
@@ -36,6 +35,19 @@ class PlayList extends Component{
       </div>
     )
   }
+
+  //helper functions
+  onAddPlayListbBegins(evt) {
+    let tempName = this.refs.playlistName.value
+    if (tempName.length > 0){
+      this.refs.playlistName.value = ''
+      this.props.onAddPlayList(tempName)
+    } else {
+      this.refs.playlistName.focus()
+    }
+
+  }
+
 }
 
 export default PlayList

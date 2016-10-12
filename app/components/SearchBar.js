@@ -23,7 +23,6 @@ class SearchBar extends Component{
 
   onSearchBegins() {
     let searchText = this.refs.searchText.value
-    console.log(`You search ${searchText}`)
     if (searchText.length > 0){
       this.refs.searchText.value = ''
       this.props.onSearchTerm(searchText)
