@@ -17,3 +17,26 @@
 iframe {
   max-width: 100%;
 }
+
+
+.logo-icon-search{
+  background-image: url("http://www.freeiconspng.com/uploads/search-icon-png-11.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 25px;
+  height: 25px;
+  display: inline-block;
+}
+
+.top-bar{
+  padding-left: 20px;
+  li.logo-title{
+    padding-left: 15px;
+  }
+}
+
+.content-right{
+  max-width: 300px;
+  padding-left: 100px;
+}

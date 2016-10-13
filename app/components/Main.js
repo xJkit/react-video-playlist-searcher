@@ -93,7 +93,9 @@ class Main extends Component {
           </div>
         )
       } else {
-        return (<div>首頁！！！</div>)
+        return (
+          <img src="http://cdn.marketplaceimages.windowsphone.com/v8/images/a357233d-33e3-4778-a444-38d1ad2d8838?imageType=ws_icon_large" alt="" className="content-right"/>
+        )
       }
     }
 

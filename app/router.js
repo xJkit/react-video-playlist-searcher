@@ -3,7 +3,6 @@ import {Router, Route, IndexRoute, hashHistory} from 'react-router'
 
 // Load components
 import Main from 'Main'
-import DisplayIndex from 'DisplayIndex'
 
 
 const router = (
